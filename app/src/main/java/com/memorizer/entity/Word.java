@@ -2,7 +2,14 @@ package com.memorizer.entity;
 
 import java.util.Objects;
 
+import androidx.annotation.NonNull;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+@Entity
 public class Word {
+    @PrimaryKey
+    @NonNull
     private String word;
     private String translation;
 

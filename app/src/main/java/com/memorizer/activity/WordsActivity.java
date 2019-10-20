@@ -1,21 +1,24 @@
 package com.memorizer.activity;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.memorizer.App;
 import com.memorizer.R;
 import com.memorizer.adapter.WordAdapter;
+import com.memorizer.db.AppDatabase;
 import com.memorizer.entity.Word;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class WordsActivity extends AppCompatActivity {
@@ -24,6 +27,8 @@ public class WordsActivity extends AppCompatActivity {
     private FloatingActionButton addButton;
     private RecyclerView recyclerView;
     private WordAdapter wordAdapter;
+
+    private AppDatabase appDatabase = App.getAppDatabase();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,18 +46,33 @@ public class WordsActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.word_recycle_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayout.VERTICAL));
+
         wordAdapter = new WordAdapter();
         recyclerView.setAdapter(wordAdapter);
 
-        List<Word> words = getWords();
-        wordAdapter.setWords(words);
+        loadWords();
     }
 
-    private List<Word> getWords(){
-        return Arrays.asList(
-                new Word("Father", "Ата"),
-                new Word("Mother", "Апа"),
-                new Word("Brother", "Байке")
-        );
+    private void loadWords(){
+        new AsyncTask<Void, Void, List<Word>>() {
+            @Override
+            protected List<Word> doInBackground(Void... voids) {
+                return appDatabase.getWordDao().getWords();
+            }
+
+            @Override
+            protected void onPostExecute(List<Word> words) {
+                wordAdapter.setWords(words);
+            }
+        }.execute();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == ADD_WORD_REQUEST_CODE && resultCode == RESULT_OK){
+            loadWords();
+        }
     }
 }
