@@ -44,6 +44,7 @@ public class WordsActivity extends AppCompatActivity {
             }
         });
         recyclerView = findViewById(R.id.word_recycle_view);
+        recyclerView.setHasFixedSize(false);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayout.VERTICAL));
         wordAdapter = new WordAdapter();
