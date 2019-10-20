@@ -13,3 +13,6 @@ You need to insert words by yourself typing Word which you want to memorize and 
 Press "plus" button on the bottom right and type word and translation which you want.
 After memorization you can delete word by clicking on word in the list.
 
+#### Installation
+
+Open Release section download apk to your android device. Enjoy.
