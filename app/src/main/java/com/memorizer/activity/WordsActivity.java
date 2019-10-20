@@ -46,10 +46,8 @@ public class WordsActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.word_recycle_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayout.VERTICAL));
-
         wordAdapter = new WordAdapter();
         recyclerView.setAdapter(wordAdapter);
-
         loadWords();
     }
 
@@ -67,6 +65,8 @@ public class WordsActivity extends AppCompatActivity {
         }.execute();
     }
 
+
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -75,4 +75,6 @@ public class WordsActivity extends AppCompatActivity {
             loadWords();
         }
     }
+
+
 }

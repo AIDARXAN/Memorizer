@@ -1,12 +1,16 @@
 package com.memorizer.adapter;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.memorizer.App;
 import com.memorizer.R;
+import com.memorizer.activity.WordsActivity;
+import com.memorizer.db.AppDatabase;
 import com.memorizer.entity.Word;
 
 import java.util.ArrayList;
@@ -15,8 +19,12 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+
 public class WordAdapter extends RecyclerView.Adapter<WordAdapter.WordViewHolder> {
     private List<Word> words;
+    private AppDatabase appDatabase = App.getAppDatabase();
+    public Word word;
+    WordsActivity wordsActivity = new WordsActivity();
 
     public WordAdapter(){
         words = new ArrayList<>();
@@ -54,14 +62,38 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.WordViewHolder
 
         public WordViewHolder(@NonNull View itemView) {
             super(itemView);
-
             wordTextView = itemView.findViewById(R.id.word_text_view);
             translateTextView = itemView.findViewById(R.id.translated_text_view);
+            itemView.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View view) {
+                    deleteItem(getAdapterPosition());
+                }
+            });
         }
 
         public void bind(Word word) {
             wordTextView.setText(word.getWord());
             translateTextView.setText(word.getTranslation());
         }
+    }
+
+    public void deleteItem(int position) {
+        Word word = words.get(position);
+        words.remove(position);
+        notifyItemRemoved(position);
+
+        deleteWordFromDatabase(word);
+    }
+
+    public void deleteWordFromDatabase(final Word word){
+        new AsyncTask<Void, Void, Void>(){
+
+            @Override
+            protected Void doInBackground(Void... voids) {
+                appDatabase.getWordDao().delete(word);
+                return null;
+            }
+        }.execute();
     }
 }
