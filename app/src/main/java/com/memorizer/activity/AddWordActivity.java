@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.memorizer.App;
 import com.memorizer.R;
@@ -37,7 +36,6 @@ public class AddWordActivity  extends AppCompatActivity {
                 String wordString = wordEditText.getText().toString();
                 String translationString = translationEditText.getText().toString();
 
-                String msg = "Saved " + wordString + " : " + translationString;
                 Word word = new Word(wordString, translationString);
                 saveToDatabase(word);
             }
