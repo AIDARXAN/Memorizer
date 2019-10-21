@@ -12,10 +12,12 @@ public class Word {
     @NonNull
     private String word;
     private String translation;
+    private String transcription;
 
-    public Word(String word, String translation) {
+    public Word(@NonNull String word, String translation, String transcription) {
         this.word = word;
         this.translation = translation;
+        this.transcription = transcription;
     }
 
     public String getWord() {
@@ -26,6 +28,9 @@ public class Word {
         return translation;
     }
 
+    public String getTranscription() {
+        return transcription;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -33,11 +38,11 @@ public class Word {
         if (o == null || getClass() != o.getClass()) return false;
         Word word1 = (Word) o;
         return word.equals(word1.word) &&
-                translation.equals(word1.translation);
+                translation.equals(word1.translation) && transcription.equals(word1.transcription);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(word, translation);
+        return Objects.hash(word, translation, transcription);
     }
 }

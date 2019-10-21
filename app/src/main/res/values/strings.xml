@@ -3,4 +3,5 @@
     <string name="enter_word">Введите слово</string>
     <string name="enter_translation">Введите перевод</string>
     <string name="add">Добваить</string>
+    <string name="add_transcription">Введите траскрипцию</string>
 </resources>

@@ -14,7 +14,7 @@ public class App extends Application {
         super.onCreate();
 
         appDatabase = Room
-                .databaseBuilder(this, AppDatabase.class, "app-database")
+                .databaseBuilder(this, AppDatabase.class, "app-database1")
                 .build();
     }
 

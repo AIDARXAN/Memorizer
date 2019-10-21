@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.memorizer.App;
@@ -25,6 +26,7 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.WordViewHolder
     private AppDatabase appDatabase = App.getAppDatabase();
     public Word word;
     WordsActivity wordsActivity = new WordsActivity();
+    private ImageButton deleteItemButton;
 
     public WordAdapter(){
         words = new ArrayList<>();
@@ -59,15 +61,19 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.WordViewHolder
     class WordViewHolder extends RecyclerView.ViewHolder {
         private TextView wordTextView;
         private TextView translateTextView;
+        private TextView transcriptTextView;
 
         public WordViewHolder(@NonNull View itemView) {
             super(itemView);
             wordTextView = itemView.findViewById(R.id.word_text_view);
             translateTextView = itemView.findViewById(R.id.translated_text_view);
-            itemView.setOnClickListener(new View.OnClickListener(){
+            transcriptTextView = itemView.findViewById(R.id.transcript_text_view);
+            itemView.setOnLongClickListener(new View.OnLongClickListener(){
+
                 @Override
-                public void onClick(View view) {
+                public boolean onLongClick(View view) {
                     deleteItem(getAdapterPosition());
+                    return true;
                 }
             });
         }
@@ -75,6 +81,7 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.WordViewHolder
         public void bind(Word word) {
             wordTextView.setText(word.getWord());
             translateTextView.setText(word.getTranslation());
+            transcriptTextView.setText(word.getTranscription());
         }
     }
 

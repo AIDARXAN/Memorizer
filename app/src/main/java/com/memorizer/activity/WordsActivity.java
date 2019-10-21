@@ -27,7 +27,8 @@ public class WordsActivity extends AppCompatActivity {
     private FloatingActionButton addButton;
     private RecyclerView recyclerView;
     private WordAdapter wordAdapter;
-
+    private WordAdapter deleteAdapter;
+    private FloatingActionButton deleteButton;
     private AppDatabase appDatabase = App.getAppDatabase();
 
     @Override
@@ -35,14 +36,8 @@ public class WordsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        addButton = findViewById(R.id.add_button);
-        addButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(WordsActivity.this, AddWordActivity.class);
-                startActivityForResult(intent, ADD_WORD_REQUEST_CODE);
-            }
-        });
+
+
         recyclerView = findViewById(R.id.word_recycle_view);
         recyclerView.setHasFixedSize(false);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -50,6 +45,24 @@ public class WordsActivity extends AppCompatActivity {
         wordAdapter = new WordAdapter();
         recyclerView.setAdapter(wordAdapter);
         loadWords();
+        deleteButton = findViewById(R.id.delete_all_button);
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                deleteWords();
+                deleteAdapter = new WordAdapter();
+                recyclerView.setAdapter(deleteAdapter);
+            }
+        });
+        addButton = findViewById(R.id.add_button);
+        addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(WordsActivity.this, AddWordActivity.class);
+                startActivityForResult(intent, ADD_WORD_REQUEST_CODE);
+
+            }
+        });
     }
 
     private void loadWords(){
@@ -66,6 +79,16 @@ public class WordsActivity extends AppCompatActivity {
         }.execute();
     }
 
+    private void deleteWords(){
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+               appDatabase.getWordDao().deleteAll();
+               return null;
+            }
+        }.execute();
+    }
+
 
 
     @Override
@@ -74,8 +97,10 @@ public class WordsActivity extends AppCompatActivity {
 
         if(requestCode == ADD_WORD_REQUEST_CODE && resultCode == RESULT_OK){
             loadWords();
+            recyclerView.setAdapter(wordAdapter);
         }
     }
+
 
 
 }

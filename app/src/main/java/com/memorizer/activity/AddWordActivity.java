@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 public class AddWordActivity  extends AppCompatActivity {
     private EditText wordEditText;
     private EditText translationEditText;
+    private EditText transcriptionEditText;
     private Button saveButton;
 
     private AppDatabase appDatabase = App.getAppDatabase();
@@ -28,6 +29,7 @@ public class AddWordActivity  extends AppCompatActivity {
 
         wordEditText = findViewById(R.id.word_edit_text);
         translationEditText = findViewById(R.id.translate_edit_text);
+        transcriptionEditText = findViewById(R.id.transcript_edit_text);
         saveButton = findViewById(R.id.save_button);
 
         saveButton.setOnClickListener(new View.OnClickListener() {
@@ -35,8 +37,8 @@ public class AddWordActivity  extends AppCompatActivity {
             public void onClick(View view) {
                 String wordString = wordEditText.getText().toString();
                 String translationString = translationEditText.getText().toString();
-
-                Word word = new Word(wordString, translationString);
+                String transcriptionString = transcriptionEditText.getText().toString();
+                Word word = new Word(wordString, translationString, transcriptionString);
                 saveToDatabase(word);
             }
         });

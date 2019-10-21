@@ -20,4 +20,7 @@ public interface WordDao {
 
     @Delete
     void delete(Word word);
+
+    @Query("DELETE FROM Word")
+    void deleteAll();
 }
