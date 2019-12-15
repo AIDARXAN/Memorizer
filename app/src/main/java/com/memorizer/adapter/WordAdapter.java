@@ -24,9 +24,6 @@ import androidx.recyclerview.widget.RecyclerView;
 public class WordAdapter extends RecyclerView.Adapter<WordAdapter.WordViewHolder> {
     private List<Word> words;
     private AppDatabase appDatabase = App.getAppDatabase();
-    public Word word;
-    WordsActivity wordsActivity = new WordsActivity();
-    private ImageButton deleteItemButton;
 
     public WordAdapter(){
         words = new ArrayList<>();

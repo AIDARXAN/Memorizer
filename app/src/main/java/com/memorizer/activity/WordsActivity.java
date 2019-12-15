@@ -36,15 +36,17 @@ public class WordsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-
         recyclerView = findViewById(R.id.word_recycle_view);
+
         recyclerView.setHasFixedSize(false);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayout.VERTICAL));
+
         wordAdapter = new WordAdapter();
         recyclerView.setAdapter(wordAdapter);
+
         loadWords();
+
         deleteButton = findViewById(R.id.delete_all_button);
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
