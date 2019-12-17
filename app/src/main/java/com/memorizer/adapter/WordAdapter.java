@@ -5,12 +5,11 @@ import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.memorizer.App;
 import com.memorizer.R;
-import com.memorizer.activity.WordsActivity;
 import com.memorizer.db.AppDatabase;
 import com.memorizer.entity.Word;
 
@@ -40,7 +39,9 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.WordViewHolder
     @Override
     public WordViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Context context = parent.getContext();
-        View view = LayoutInflater.from(context).inflate(R.layout.word_item_view, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.word_item_view,
+                                                         parent,
+                                              false);
         return new WordViewHolder(view);
     }
 
@@ -59,20 +60,30 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.WordViewHolder
         private TextView wordTextView;
         private TextView translateTextView;
         private TextView transcriptTextView;
+        private Button deleteButton;
 
         public WordViewHolder(@NonNull View itemView) {
             super(itemView);
             wordTextView = itemView.findViewById(R.id.word_text_view);
             translateTextView = itemView.findViewById(R.id.translated_text_view);
             transcriptTextView = itemView.findViewById(R.id.transcript_text_view);
-            itemView.setOnLongClickListener(new View.OnLongClickListener(){
+            deleteButton = itemView.findViewById(R.id.button_delete);
 
+            deleteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    deleteItem(getAdapterPosition());
+                }
+            });
+
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View view) {
-                    deleteItem(getAdapterPosition());
+                    updateItemType(getAdapterPosition());
                     return true;
                 }
             });
+
         }
 
         public void bind(Word word) {
@@ -90,6 +101,15 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.WordViewHolder
         deleteWordFromDatabase(word);
     }
 
+    public void updateItemType(int position){
+        Word word = words.get(position);
+        words.remove(position);
+        notifyItemRemoved(position);
+        word.setType(2);
+
+        updateWordInDatabase(word);
+    }
+
     public void deleteWordFromDatabase(final Word word){
         new AsyncTask<Void, Void, Void>(){
 
@@ -100,4 +120,15 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.WordViewHolder
             }
         }.execute();
     }
+    public void updateWordInDatabase(final Word word){
+        new AsyncTask<Void, Void, Void>(){
+
+            @Override
+            protected Void doInBackground(Void... voids) {
+                appDatabase.getWordDao().update(word);
+                return null;
+            }
+        }.execute();
+    }
+
 }

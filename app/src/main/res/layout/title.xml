@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <style android:name="theme">
+        <item android:name="android:windowTitleBackgroundStyle">@style/themeTitleBackground</item>
+        <item android:name="android:windowTitleSize">65dip</item>
+
+    </style>
+
+    <style android:name="themeTitleBackground">
+        <item android:name="android:layout_height">wrap_content</item>
+
+
+    </style>
+</LinearLayout>

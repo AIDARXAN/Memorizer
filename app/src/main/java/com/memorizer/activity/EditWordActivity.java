@@ -1,5 +1,6 @@
 package com.memorizer.activity;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -13,12 +14,11 @@ import com.memorizer.entity.Word;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class AddWordActivity  extends AppCompatActivity {
+public class EditWordActivity extends AppCompatActivity {
     private EditText wordEditText;
     private EditText translationEditText;
     private EditText transcriptionEditText;
     private Button saveButton;
-
     private AppDatabase appDatabase = App.getAppDatabase();
 
 
@@ -31,6 +31,11 @@ public class AddWordActivity  extends AppCompatActivity {
         translationEditText = findViewById(R.id.translate_edit_text);
         transcriptionEditText = findViewById(R.id.transcript_edit_text);
         saveButton = findViewById(R.id.save_button);
+
+        Intent intent = getIntent();
+        wordEditText.setText(intent.getStringExtra("word"));
+        translationEditText.setText(intent.getStringExtra("translation"));
+        transcriptionEditText.setText(intent.getStringExtra("transcription"));
 
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -50,7 +55,7 @@ public class AddWordActivity  extends AppCompatActivity {
 
             @Override
             protected Void doInBackground(Void... voids) {
-                appDatabase.getWordDao().insert(word);
+                appDatabase.getWordDao().update(word);
                 return null;
             }
 

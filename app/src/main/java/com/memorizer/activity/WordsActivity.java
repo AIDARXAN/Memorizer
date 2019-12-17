@@ -11,6 +11,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.memorizer.App;
@@ -42,6 +43,7 @@ public class WordsActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayout.VERTICAL));
 
+
         wordAdapter = new WordAdapter();
         recyclerView.setAdapter(wordAdapter);
 
@@ -60,14 +62,17 @@ public class WordsActivity extends AppCompatActivity {
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 Intent intent = new Intent(WordsActivity.this, AddWordActivity.class);
                 startActivityForResult(intent, ADD_WORD_REQUEST_CODE);
 
             }
         });
+
+
     }
 
-    private void loadWords(){
+    private void loadWords() {
         new AsyncTask<Void, Void, List<Word>>() {
             @Override
             protected List<Word> doInBackground(Void... voids) {
@@ -81,28 +86,26 @@ public class WordsActivity extends AppCompatActivity {
         }.execute();
     }
 
-    private void deleteWords(){
+    private void deleteWords() {
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... voids) {
-               appDatabase.getWordDao().deleteAll();
-               return null;
+                appDatabase.getWordDao().deleteAll();
+                return null;
             }
         }.execute();
     }
-
 
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == ADD_WORD_REQUEST_CODE && resultCode == RESULT_OK){
+        if (requestCode == ADD_WORD_REQUEST_CODE && resultCode == RESULT_OK) {
             loadWords();
             recyclerView.setAdapter(wordAdapter);
         }
     }
-
 
 
 }
